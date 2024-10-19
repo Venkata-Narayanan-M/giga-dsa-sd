@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      canvas {
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="myCanvas" width="500" height="500"></canvas>
+
+    <script>
+      var canvas = document.getElementById("myCanvas");
+      var ctx = canvas.getContext("2d");
+
+      function drawTextAlongArc(
+        context,
+        text,
+        centerX,
+        centerY,
+        radius,
+        angle
+      ) {
+        var len = text.length,
+          s;
+        context.save();
+        context.translate(centerX, centerY);
+        context.rotate((-1 * angle) / 2);
+        context.rotate((-1 * (angle / len)) / 2);
+        for (var n = 0; n < len; n++) {
+          context.rotate(angle / len);
+          context.save();
+          context.translate(0, -1 * radius);
+          s = text[n];
+          context.fillText(s, 0, 0);
+          context.restore();
+        }
+        context.restore();
+      }
+
+      var text = "Curved Text";
+      var centerX = canvas.width / 2;
+      var centerY = canvas.height / 2;
+      var radius = 150;
+      var angle = Math.PI / 4;
+
+      ctx.font = "30px Arial";
+      ctx.textAlign = "center";
+      drawTextAlongArc(ctx, text, centerX, centerY, radius, angle);
+    </script>
+  </body>
+</html>
