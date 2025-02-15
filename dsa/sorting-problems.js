@@ -544,5 +544,101 @@ function largestString(A) {
   return sortedArr.join("");
 }
 
-console.log(largestString([3, 30, 34, 5, 9]));
-console.log("330".localeCompare("303"));
+// console.log(largestString([3, 30, 34, 5, 9]));
+// console.log("330".localeCompare("303"));
+
+const LinkedListNode = class {
+  constructor(value) {
+    this.value = value;
+    this.next = null;
+  }
+};
+
+function merge_k_lists(lists) {
+  if (lists.length === 0) {
+    return null;
+  }
+
+  let low,
+    high,
+    last = lists.length - 1;
+
+  while (last !== 0) {
+    low = 0;
+    high = last;
+
+    while (low < high) {
+      lists[low] = merge_two_lists(lists[low], lists[high]);
+      low++;
+      high--;
+    }
+    last = high;
+  }
+  return lists[0];
+}
+
+function merge_two_lists(head1, head2) {
+  if (head1 === null) return head2;
+  if (head2 === null) return head1;
+
+  let dummy = new LinkedListNode(0);
+  let tail = dummy;
+
+  while (head1 !== null || head2 !== null) {
+    if (head1 == null) {
+      tail.next = head2;
+      head2 = head2.next;
+    } else if (head2 === null) {
+      tail.next = head1;
+      head1 = head1.next;
+    } else {
+      if (head1.value < head2.value) {
+        tail.next = head1;
+        head1 = head1.next;
+      } else {
+        tail.next = head2;
+        head2 = head2.next;
+      }
+    }
+    tail = tail.next;
+  }
+  return dummy.next;
+}
+
+// console.log(merge_k_lists([[1, 3, 5], [3, 4], [7]]));
+
+function find_top_k_frequent_elements(arr, k) {
+  if (arr.length === 0) return 0;
+
+  let hashMap = {};
+
+  for (let ele of arr) {
+    if (!hashMap[ele]) {
+      hashMap[ele] = 0;
+    }
+    hashMap[ele]++;
+  }
+
+  hashMap = new Map(Object.entries(hashMap).sort((a, b) => b[1] - a[1]));
+
+  return Array.from(hashMap.keys()).slice(0, k).map(Number);
+}
+
+let arr = [1, 2, 1, 2, 3, 1];
+// console.log(find_top_k_frequent_elements(arr, 1));
+
+function kth_largest(k, initial_stream, append_stream) {
+  let result = [];
+  for (let ele of append_stream) {
+    initial_stream.push(ele);
+    result.push(initial_stream.sort((a, b) => b - a)?.[k - 1]);
+  }
+
+  return result;
+}
+
+k = 1;
+let initial_stream = [1000000000];
+let append_stream = [100000000];
+
+console.log(kth_largest(k, initial_stream, append_stream));
